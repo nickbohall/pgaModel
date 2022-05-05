@@ -5,7 +5,7 @@ import requests
 import pandas as pd
 import re #Finds integers in strings
 
-playerDict = {'First name': [], 'Last name': [], 'Player ID': []} #intialize Dictionary
+playerDict = {'Player Number': [], 'First name': [], 'Last name': []} #intialize Dictionary
 names = []
 nameArray = []
 numberArray = []
@@ -22,7 +22,8 @@ for player in playerCard:
     playerFullName = playerFirstName + ' ' + playerLastName #Combines full name
     playerDict['First name'].append(playerFirstName)
     playerDict['Last name'].append(playerLastName)
-    playerDict['Player ID'].append(playerNumber)   
+    playerDict['Player Number'].append(playerNumber)   
+
 
 
 player_df = pd.DataFrame.from_dict(playerDict)

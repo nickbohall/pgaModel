@@ -57,9 +57,8 @@ df_merged = ft.reduce(lambda  left,right: pd.merge(left,right,on=['Player Number
 master = playerMapping.player_df.merge(df_merged, how = 'right',on = 'Player Number') #merging with names
 master['rank'] = master['TOT average'].rank(ascending=False).astype(int) #Creating rank column on TOT
 master = master.sort_values(by=['rank']) #sorting by overall rank
-
-print(master)
-
+print(master.head(20)
+)
 
 
 

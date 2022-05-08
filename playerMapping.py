@@ -28,6 +28,7 @@ for player in playerCard:
 
 
 player_df = pd.DataFrame.from_dict(playerDict)
+print(player_df)
 
 
 

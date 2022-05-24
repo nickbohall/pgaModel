@@ -38,5 +38,3 @@ tourneyListformatted = ['us-open' if item == 'u.s.-open' else item for item in t
 tourneyListformatted = ['fedex-st-jude-championship' if item == 'fedex-st.-jude-championship' else item for item in tourneyListformatted]
 
 tourneyListformatted.remove('ryder-cup')
-
-print(tourneyListformatted)

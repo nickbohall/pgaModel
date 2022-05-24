@@ -58,7 +58,10 @@ def tourneyStats(tourney):
     my_df['posAvg'] = my_df[posCols].mean(axis=1, skipna=True).round() #getting avg of position
     my_df['scoreAvg'] = my_df[parCols].mean(axis=1, skipna=True).round() #getting avg of score
     return my_df.sort_values(by="posAvg", ascending = True)
-    
-for tourney in tourneyList.tourneyListformatted:
-    print(tourney)
-    print(tourneyStats(tourney).head(5))
+
+def allTourneys():    
+    for tourney in tourneyList.tourneyListformatted:
+        print(tourney)
+        print(tourneyStats(tourney).head(5))
+
+print(tourneyStats('us-open'))

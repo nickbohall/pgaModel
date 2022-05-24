@@ -25,10 +25,7 @@ for player in playerCard:
     playerDict['player number'].append(playerNumber)   
     playerDict['full name'].append(f'{playerFirstName} {playerLastName}')
 
-
-
 player_df = pd.DataFrame.from_dict(playerDict)
-print(player_df)
 
 
 

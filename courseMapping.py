@@ -24,7 +24,7 @@ def courses(): #helper function to get all of the courses & their numbers
 
     return courseDict
 
-def apiScrape(courseName, courseNum, id=''): #This is the function that actually goes to the API for each course & number
+def apiScrape(courseName, courseNum, id='', playing=False, minRounds = 1): #This is the function that actually goes to the API for each course & number
     url = f'https://api.datagolf.ca/dg-api/v1/get_ch_data?callback=callback&course_num=ch_{courseNum}&_={id}'
     html_text = requests.get(url).text #goes to the url
     soup = BeautifulSoup(html_text, 'lxml') #us BS to parse html
@@ -36,16 +36,24 @@ def apiScrape(courseName, courseNum, id=''): #This is the function that actually
         cdict = json.loads(ele)
         course_dict.append(cdict)
 
-    print(courseName)
     df = pd.DataFrame.from_dict(course_dict) #dict to df
+    df = df.rename(columns={'mean_sg': 'True SG', 'mean_res_sg': 'versus expectation','suggested_adjustment': 'experience','count': 'appearences'})
+    if playing == True: #defaults to if they're currently playing in the tourney
+        df = df[df['in_field'] == 1] 
+    df = df[df['appearences'] >= minRounds]
+    df = df.sort_values(by='True SG', ascending=False) #Sorting by True SG
+    print(courseName)
     return df
 
 # print(apiScrape('14', '1653426856474'))
 
-def allCourses(): #Loops through all of the courses and generates a df from the api
+def allCourses(playing=False, minRounds = 1): #Loops through all of the courses and generates a df from the api
     for course in courses():
-        print(apiScrape(course['courseName'], course['courseNumber']))
-        break
+        df = apiScrape(course['courseName'], course['courseNumber'],playing, minRounds)
+        print(df)
 
-print(allCourses())
-print(courses())
+df = apiScrape('Colonial Country Club','21',True,1)
+# df = allCourses(playing = False, minRounds = 2)
+print(df.head(50))
+
+

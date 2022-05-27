@@ -64,4 +64,4 @@ def allTourneys():
         print(tourney)
         print(tourneyStats(tourney).head(5))
 
-print(tourneyStats('us-open'))
+print(tourneyStats('charles-schwab-challenge').head(50))

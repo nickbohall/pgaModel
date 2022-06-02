@@ -21,10 +21,16 @@ def courses(): #helper function to get all of the courses & their numbers
         tempDict['courseName'] = course_name
         tempDict['courseNumber'] = course_value
         courseDict.append(tempDict)
-
     return courseDict
+def playerNames():
 
-def apiScrape(courseName, courseNum, id='', playing=False, minRounds = 1): #This is the function that actually goes to the API for each course & number
+def courseNames(): #list all course names
+    courseList = []
+    for course in courses():
+        courseList.append(course['courseName'])
+    return courseList
+
+def apiScrape(courseName, courseNum, minRounds, id='', playing=False ): #This is the function that actually goes to the API for each course & number
     url = f'https://api.datagolf.ca/dg-api/v1/get_ch_data?callback=callback&course_num=ch_{courseNum}&_={id}'
     html_text = requests.get(url).text #goes to the url
     soup = BeautifulSoup(html_text, 'lxml') #us BS to parse html
@@ -45,15 +51,20 @@ def apiScrape(courseName, courseNum, id='', playing=False, minRounds = 1): #This
     print(courseName)
     return df
 
-# print(apiScrape('14', '1653426856474'))
-
 def allCourses(playing=False, minRounds = 1): #Loops through all of the courses and generates a df from the api
     for course in courses():
         df = apiScrape(course['courseName'], course['courseNumber'],playing, minRounds)
         print(df)
 
+def oneCourse(course, playing = False, minRounds = 0):
+    i = None
+    for sub in courses():
+        if sub['courseName'] == course:
+            i = sub    
+    df = apiScrape(i['courseName'], i['courseNumber'],playing, minRounds)
+    return df
+
 df = apiScrape('Colonial Country Club','21',True,1)
-# df = allCourses(playing = False, minRounds = 2)
-print(df.head(50))
+print(oneCourse('St. Andrews GC (Old Course)', minRounds=1).head(50))
 
 

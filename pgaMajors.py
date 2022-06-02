@@ -14,7 +14,6 @@ from datetime import date
 import playerMapping
 import tourneyList
 
-
 year = date.today().year
 start = 'https://www.pgatour.com/tournaments/' #just creating the links more efficiently, they all start with this
 tourney = 'fortinet-championship' #This needs to be an array of tournaments to loop through
@@ -64,4 +63,4 @@ def allTourneys():
         print(tourney)
         print(tourneyStats(tourney).head(5))
 
-print(tourneyStats('charles-schwab-challenge').head(50))
+print(tourneyStats('the-open-championship').head(50))

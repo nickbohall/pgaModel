@@ -5,6 +5,10 @@ import requests
 import pandas as pd
 import re #Finds integers in strings
 import courseMapping
+import os
+
+#SOURCE: PGA Website
+
 
 playerDict = {'player number': [], 'first name': [], 'last name': [], 'full name': []} #intialize Dictionary
 names = []
@@ -66,6 +70,8 @@ def flatten_list(_2d_list): #flatten helper function
 dataGolfdf = playerMap()
 
 master = player_df.merge(dataGolfdf, how = 'right',on = 'full name') #merging with names
+master.drop('backwards name', inplace=True, axis=1)
+master = master.rename(columns={'first name_x': 'pga FN', 'last name_x': 'pga LN','first name_y': 'DG FN', 'last name_y': 'DG LN' })
 
 
 

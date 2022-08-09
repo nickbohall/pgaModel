@@ -63,4 +63,4 @@ def allTourneys():
         print(tourney)
         print(tourneyStats(tourney).head(5))
 
-print(tourneyStats('the-open-championship').head(50))
+# print(tourneyStats('fedex-st-jude-championship').head(50))

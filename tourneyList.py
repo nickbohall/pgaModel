@@ -36,7 +36,6 @@ tourneyListformatted = ['zurich-classic-of-new-orleans' if item == 'zurich-class
 tourneyListformatted = ['at-t-byron-nelson' if item == 'at&t-byron-nelson' else item for item in tourneyListformatted]
 tourneyListformatted = ['us-open' if item == 'u.s.-open' else item for item in tourneyListformatted]
 tourneyListformatted = ['fedex-st-jude-championship' if item == 'fedex-st.-jude-championship' else item for item in tourneyListformatted]
-
 tourneyListformatted.remove('ryder-cup')
 
-print(tourneyListformatted)
+# print(tourneyListformatted)

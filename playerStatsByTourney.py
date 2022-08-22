@@ -40,13 +40,16 @@ def tourneyStats(tourney):
             t[round_columns] = t[round_columns].applymap(lambda x: x.split(' ')[0])
             t = t.rename(columns={'PLAYER': 'full name', 'POS': f'{year} pos','TO PAR': f'{year} toPar'})
             df = t[['full name', f'{year} pos', f'{year} toPar']]
-            df = df.replace('CUT', np.nan, regex=True)
-            df = df.replace('T','', regex=True)
-            df = df.replace('W/D',  np.nan , regex=True)
-            df = df.replace('E','0', regex=True)
-            df = df.replace('DQ', np.nan, regex=True)
+            numPlayers = len(df.index) #counts no. of players in the tourney
+            cutFinish = str(round(numPlayers * (3/4))) #a number to punish if you didn't make the cut, set to 3/4s way down the leaderboard
+            df = df.replace('CUT', cutFinish, regex=True) #replacing cut with the cutNo
+            df = df.replace('T','', regex=True) #removing Ties
+            df = df.replace('W/D',  np.nan , regex=True) #disregard W/D
+            df = df.replace('E','0', regex=True) #Even par is 0
+            df = df.replace('DQ', np.nan, regex=True) #disregard DQ
             df = df.astype({f'{year} pos': 'Int64', f'{year} toPar': 'Int64'})
             my_df = my_df.merge(df, how='left', on= 'full name')
+            print(my_df.dtypes)
         except: 
             print(f'{year} did not have this tourney')
             continue
@@ -63,4 +66,4 @@ def allTourneys():
         print(tourney)
         print(tourneyStats(tourney).head(5))
 
-# print(tourneyStats('fedex-st-jude-championship').head(50))
+print(tourneyStats('fedex-st-jude-championship').head(50))

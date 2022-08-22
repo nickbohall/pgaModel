@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 import re #Finds integers in strings
-import courseMapping
+import playerStatsByCourse
 import os
 
 #SOURCE: PGA Website
@@ -35,7 +35,7 @@ player_df = pd.DataFrame.from_dict(playerDict)
 def playerMap():
     allPlayers = [] #intialize list
     playerDict = {'backwards name': [], 'first name': [], 'last name': [], 'full name': []} #initialize dict
-    for course in courseMapping.allCourses(): #call the scrape on all courses on the list
+    for course in playerStatsByCourse.allCourses(): #call the scrape on all courses on the list
         tempList = course['player_name'].tolist()
         allPlayers.append(tempList)
     

@@ -3,34 +3,33 @@
 from bs4 import BeautifulSoup
 import requests
 import pandas as pd
-import re #Finds integers in strings
-import playerStatsByCourse
-import os
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.common.by import By
+import time
+# import playerStatsByCourse
 
-#SOURCE: PGA Website
+
+#SOURCE: https://www.pgatour.com/players
 
 
-playerDict = {'player number': [], 'first name': [], 'last name': [], 'full name': []} #intialize Dictionary
-names = []
-nameArray = []
-numberArray = []
-
-url = 'https://www.pgatour.com/players.html'
-html_text = requests.get(url).text
-soup = BeautifulSoup(html_text, 'html.parser')
-playerCard = soup.find_all('li', class_='player-card') #This is getting the general card of all
-for player in playerCard: 
-    playerId = player.find('a').get('href') #This just takes the first line: format - /players/player.08429.rodney-wilson.html
-    playerNumber = playerId[slice(16,21)] #Parses just the number from ID & turns to int
-    playerFirstName = player.find('span', class_='player-firstname').text #Gets first name as str
-    playerLastName = player.find('span', class_='player-surname').text #Gets last name as str
-    playerFullName = playerFirstName + ' ' + playerLastName #Combines full name
-    playerDict['first name'].append(playerFirstName)
-    playerDict['last name'].append(playerLastName)
-    playerDict['player number'].append(playerNumber)   
-    playerDict['full name'].append(f'{playerFirstName} {playerLastName}')
-
-player_df = pd.DataFrame.from_dict(playerDict)
+def get_player_list():
+    player_list = []
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    starting_url = "https://www.pgatour.com/players"
+    origin_page = driver.get(starting_url)
+    time.sleep(2)
+    all_players = driver.find_elements(By.CSS_SELECTOR, "div span p a")
+    for player in all_players:
+        individual_player_dict = {}
+        link = player.get_attribute('href')
+        player_name = player.text
+        player_number = link.split("/")[4]
+        individual_player_dict["player_name"] = player_name
+        individual_player_dict["player_number"] = player_number
+        player_list.append(individual_player_dict)
+    return player_list
 
 def playerMap():
     allPlayers = [] #intialize list
@@ -67,11 +66,11 @@ def flatten_list(_2d_list): #flatten helper function
             flat_list.append(element)
     return flat_list
 
-dataGolfdf = playerMap()
+# dataGolfdf = playerMap()
 
-master = player_df.merge(dataGolfdf, how = 'right',on = 'full name') #merging with names
-master.drop('backwards name', inplace=True, axis=1)
-master = master.rename(columns={'first name_x': 'pga FN', 'last name_x': 'pga LN','first name_y': 'DG FN', 'last name_y': 'DG LN' })
+# master = player_df.merge(dataGolfdf, how = 'right',on = 'full name') #merging with names
+# master.drop('backwards name', inplace=True, axis=1)
+# master = master.rename(columns={'first name_x': 'pga FN', 'last name_x': 'pga LN','first name_y': 'DG FN', 'last name_y': 'DG LN' })
 
 
 

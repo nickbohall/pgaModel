@@ -36,7 +36,7 @@ class PlayerMap:
             player_number_list.append(player_number)
 
         # putting the lists in the dict to become a df
-        player_dict['name'] = player_list
+        player_dict['player'] = player_list
         player_dict['player_id'] = player_number_list
-        starting_df = pd.DataFrame(player_list)
+        starting_df = pd.DataFrame(player_dict)
         return starting_df

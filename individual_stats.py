@@ -22,6 +22,8 @@ class IndividualStats:
         data_table = self.driver.find_elements(By.CSS_SELECTOR, "thead.css-0 th")
         column_headers = [item.text for item in data_table]
         column_headers[1] = "TREND"
+        if column_headers[3] != "AVERAGE":
+            column_headers[3] = "AVERAGE"
         return column_headers
 
     # This function takes a URL. It has to be in the same format as most of the stats tables.
@@ -58,6 +60,15 @@ class IndividualStats:
         df = pd.DataFrame(data_table_list)
         print("df successfully gathered")
         return df
+
+    # return reduced version of the tables for joins
+    def get_scoring_table_condensed(self, metric, url):
+        df = self.get_scoring_table(url)
+        condensed_df = df[["PLAYER", "AVERAGE"]]
+        condensed_df = condensed_df.rename(columns={"AVERAGE": f"{metric} Average", "PLAYER": "player"})
+        return condensed_df
+
+
 
 
 

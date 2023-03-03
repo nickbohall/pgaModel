@@ -1,6 +1,7 @@
 import pandas as pd
 
 # This file is just for importing the csv data. The CSV data needs to be updated every year.
+# SOURCE: https://www.advancedsportsanalytics.com/pga-raw-data
 class DataImport:
     def __init__(self):
         path = "data/2015-2022 raw data tourneylevel condensed.csv"

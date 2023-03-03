@@ -24,7 +24,7 @@ class PlayerMap:
         # getting the data and waiting for it to open
         starting_url = "https://www.pgatour.com/players"
         self.driver.get(starting_url)
-        time.sleep(2)
+        time.sleep(5)
 
         # run through all the players and get them in the right format for the dict
         all_players = self.driver.find_elements(By.CSS_SELECTOR, "div span p a")
@@ -39,4 +39,20 @@ class PlayerMap:
         player_dict['player'] = player_list
         player_dict['player_id'] = player_number_list
         starting_df = pd.DataFrame(player_dict)
+
+        print("Player mapping list gathered")
         return starting_df
+
+    # Function for getting the First initial and last name to match to the odds
+    def first_initial_map(self):
+        df = self.get_player_list()
+        splitted = df['player'].str.split()
+        first_name = splitted.str[0]
+        first_init = first_name.str.split("")
+        df['first_init'] = first_init.str[1] + "."
+        df['last_name'] = df['player'].str.split(n=1).str[1]
+        df['player_initial'] = df['first_init'].astype(str) + " " + df['last_name']
+        df = df.drop(columns=['first_init', 'last_name', 'player_id'])
+
+        return df
+

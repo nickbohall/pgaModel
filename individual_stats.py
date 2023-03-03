@@ -33,7 +33,7 @@ class IndividualStats:
         column_headers = self.get_column_headers(url)
 
         self.driver.get(url)
-        time.sleep(2)
+        time.sleep(5)
 
         # finding the data table and iterating through
         data_table = self.driver.find_elements(By.CSS_SELECTOR, "tbody.css-0 tr")
@@ -46,19 +46,22 @@ class IndividualStats:
             player_data = row.find_elements(By.CSS_SELECTOR, "td")
             player_data_clean = [item.text.replace("Expand Row", "").replace(",","").strip() for item in player_data]
 
-            for i in range(len(column_headers)):
-                item = player_data_clean[i]
-                try:
-                    item = float(item)
-                except ValueError:
-                    item = item
-                player_stats_dict[column_headers[i]] = item
+            try:
+                for i in range(len(column_headers) - 1):
+                    item = player_data_clean[i]
+                    try:
+                        item = float(item)
+                    except ValueError:
+                        item = item
+                    player_stats_dict[column_headers[i]] = item
+            except IndexError:
+                continue
 
             #Add dict to list to be put in df
             data_table_list.append(player_stats_dict)
 
         df = pd.DataFrame(data_table_list)
-        print("df successfully gathered")
+        print("individual stats df successfully gathered")
         return df
 
     # return reduced version of the tables for joins
